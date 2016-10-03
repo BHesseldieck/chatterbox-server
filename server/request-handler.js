@@ -12,6 +12,9 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
 
+var messages = require('./messages');
+// var dispatcher = require('httpdispatcher');
+
 // These headers will allow Cross-Origin Resource Sharing (CORS).
 // This code allows this server to talk to websites that
 // are on different domains, for instance, your chat client.
@@ -43,32 +46,37 @@ var requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
-  console.log('Serving request type ' + request.method + ' for url ' + request.url);
+  // console.log('Serving request type ' + request.method + ' for url ' + request.url);
+  var path = request.url.split('?')[0];
+  var query = request.url.split('?')[1];
 
-  // The outgoing status.
-  var statusCode = 200;
-
-  // See the note below about CORS headers.
+  var statusCode = 404;
   var headers = defaultCorsHeaders;
+  headers['Content-Type'] = 'application/json';
+  var answer = '';
 
-  // Tell the client we are sending them plain text.
-  //
-  // You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'text/plain';
+  if (request.method === 'GET' && path === '/classes/messages') {
+    // The outgoing status.
+    statusCode = 200;
+    // Make sure to always call response.end() - Node may not send
+    // anything back to the client until you do. The string you pass to
+    // response.end() will be the body of the response - i.e. what shows
+    // up in the browser.
+    //
+    // Calling .end "flushes" the response's internal buffer, forcing
+    // node to actually send all the data over to the client.
+    answer = JSON.stringify(messages);
+  } else if (request.method === 'POST' && path === '/classes/messages') {
+    statusCode = 201;
+    request.on('data', function(data) {
+      messages.results.unshift(JSON.parse(data)); // unshift adds new messages to front
+    });
+  }
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
-
-  // Make sure to always call response.end() - Node may not send
-  // anything back to the client until you do. The string you pass to
-  // response.end() will be the body of the response - i.e. what shows
-  // up in the browser.
-  //
-  // Calling .end "flushes" the response's internal buffer, forcing
-  // node to actually send all the data over to the client.
-  response.end('Hello, World!');
+  response.writeHead(statusCode, headers); 
+  response.end(answer);
 };
 
 module.exports = requestHandler;

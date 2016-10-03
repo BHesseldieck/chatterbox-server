@@ -5,14 +5,22 @@ var messages = {
       objectId: 'NhjOaLlsT2',
       roomname: 'lobby',
       text: 'hello there',
-      updatedAt:'2016-10-03T21:52:57.181Z',
-      username:'steve'
+      updatedAt: '2016-10-03T21:52:57.181Z',
+      username: 'steve'
     },
     {
       createdAt: '2016-10-03T21:52:49.965Z',
       objectId: 'b0uzOcAMM0',
       roomname: 'lobby',
       text: 'kasdjfkjsadf',
+      updatedAt: '2016-10-03T21:52:49.965Z',
+      username: 'steve'
+    },
+    {
+      createdAt: '2016-10-03T21:45:49.965Z',
+      objectId: 'b0uzOcshM0',
+      roomname: 'lobby',
+      text: 'testing',
       updatedAt: '2016-10-03T21:52:49.965Z',
       username: 'steve'
     }
