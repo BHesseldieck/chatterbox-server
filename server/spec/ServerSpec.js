@@ -126,4 +126,14 @@ describe('Own tests', function() {
 
     expect(res._headers['Content-Type']).to.equal('application/json');
   });
+
+  it('Should handle OPTIONS requests', function() {
+    var req = new stubs.request('/arglebargle', 'OPTIONS');
+    var res = new stubs.response();
+   
+    handler.requestHandler(req, res);
+
+    expect(res._responseCode).to.equal(200);
+    expect(res._headers['access-control-allow-methods']).to.equal('GET, POST, PUT, DELETE, OPTIONS');
+  });
 });

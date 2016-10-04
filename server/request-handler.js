@@ -71,6 +71,8 @@ var requestHandler = function(request, response) {
     request.on('data', function(data) {
       messages.results.unshift(JSON.parse(data)); // unshift adds new messages to front
     });
+  } else if (request.method === 'OPTIONS') {
+    statusCode = 200;
   }
 
   // .writeHead() writes to the request line and headers of the response,
