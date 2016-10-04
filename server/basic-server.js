@@ -1,10 +1,12 @@
-var express = require('express');
-var path = require('path');
-var fs = require('fs');
-var app = express();
+const cluster = require('cluster');
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const numCPUs = require('os').cpus().length;
+const app = express();
 
-var port = 3000;
-var ip = '127.0.0.1';
+const port = 3000;
+const ip = '127.0.0.1';
 
 app.listen(port, ip, function() {
   console.log('Listening on http://' + ip + ':' + port);
