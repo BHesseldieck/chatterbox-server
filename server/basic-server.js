@@ -21,8 +21,17 @@ app.use(function(req, res, next) {
 app.use(express.static(path.join(__dirname, '../client/client')));
 
 app.get('/classes/messages', function(req, res) {
-  console.log('order', req.query.order);  // TODO
-  res.sendFile(path.join(__dirname, '/messages.json'));
+  fs.readFile(path.join(__dirname, '/messages.json'), (err, data) => {
+    var messages = JSON.parse(data);
+    messages.results.sort(function(a, b) {
+      if (req.query.order === '-createdAt') {
+        return new Date(b.createdAt) - new Date(a.createdAt); // newest message last
+      } else {
+        return new Date(a.createdAt) - new Date(b.createdAt); // newest message first
+      }
+    });
+    res.json(messages);
+  });
 });
 
 app.post('/classes/messages', function(req, res) {
