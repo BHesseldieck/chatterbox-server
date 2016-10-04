@@ -79,4 +79,4 @@ var requestHandler = function(request, response) {
   response.end(answer);
 };
 
-module.exports = requestHandler;
+exports.requestHandler = requestHandler;

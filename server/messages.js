@@ -21,7 +21,7 @@ var messages = {
       objectId: 'b0uzOcshM0',
       roomname: 'lobby',
       text: 'testing',
-      updatedAt: '2016-10-03T21:52:49.965Z',
+      updatedAt: '2016-10-03T21:45:49.965Z',
       username: 'steve'
     }
   ]
