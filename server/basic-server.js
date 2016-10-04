@@ -25,9 +25,11 @@ app.get('/classes/messages', function(req, res) {
     var messages = JSON.parse(data);
     messages.results.sort(function(a, b) {
       if (req.query.order === '-createdAt') {
-        return new Date(b.createdAt) - new Date(a.createdAt); // newest message last
-      } else {
-        return new Date(a.createdAt) - new Date(b.createdAt); // newest message first
+        // newest message last
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      } else if (req.query.order === '+createdAt') {
+        // newest message first
+        return new Date(b.createdAt) - new Date(a.createdAt);
       }
     });
     res.json(messages);

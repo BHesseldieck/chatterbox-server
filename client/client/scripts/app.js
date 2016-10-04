@@ -7,7 +7,7 @@ var app = {
   server: 'http://127.0.0.1:3000/classes/messages',
   username: 'anonymous',
   roomname: 'lobby',
-  lastMessageId: 0,
+  lastMessageDate: '',
   friends: {},
   messages: [],
 
@@ -72,17 +72,14 @@ var app = {
 
         // Get the last message
         var mostRecentMessage = data.results[data.results.length - 1];
-
         // Only bother updating the DOM if we have a new message
-        if (mostRecentMessage.objectId !== app.lastMessageId) {
+        if (mostRecentMessage.createdAt !== app.lastMessageDate) {
           // Update the UI with the fetched rooms
           app.renderRoomList(data.results);
-
           // Update the UI with the fetched messages
           app.renderMessages(data.results, animate);
-
           // Store the ID of the most recent message
-          app.lastMessageId = mostRecentMessage.objectId;
+          app.lastMessageDate = mostRecentMessage.createdAt;
         }
       },
       error: function(error) {
@@ -166,7 +163,7 @@ var app = {
     $message.text(message.text).appendTo($chat);
 
     // Add the message to the UI
-    app.$chats.append($chat);
+    app.$chats.prepend($chat);
 
   },
 
