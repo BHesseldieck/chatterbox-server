@@ -18,6 +18,8 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(express.static(path.join(__dirname, '../client/client')));
+
 app.get('/', function(req, res) {
   res.status(200).sendFile(path.join(__dirname, '../client/client/index.html'));
 });
