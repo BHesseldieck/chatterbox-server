@@ -1,4 +1,3 @@
-
 var app = {
 
   //TODO: The current 'handleUsernameClick' function just toggles the class 'friend'

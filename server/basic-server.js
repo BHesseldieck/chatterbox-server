@@ -45,7 +45,7 @@ app.post('/classes/messages', function(req, res) {
       var messages = JSON.parse(data);
       messages.results.unshift(newMessage);
       fs.writeFile(path.join(__dirname, '/messages.json'), JSON.stringify(messages), () => {
-        res.end();
+        res.status(201).end();
       });
     });
   });
