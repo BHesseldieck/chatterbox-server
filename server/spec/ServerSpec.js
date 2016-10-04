@@ -115,5 +115,15 @@ describe('Node Server Request Listener Function', function() {
         expect(res._responseCode).to.equal(404);
       });
   });
+});
 
+describe('Own tests', function() {  
+  it('Should return application/json as content-type', function() {
+    var req = new stubs.request('/arglebargle', 'GET');
+    var res = new stubs.response();
+   
+    handler.requestHandler(req, res);
+
+    expect(res._headers['Content-Type']).to.equal('application/json');
+  });
 });
