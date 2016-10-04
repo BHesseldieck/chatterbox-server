@@ -31,11 +31,11 @@ app.get('/classes/messages', function(req, res) {
 app.post('/classes/messages', function(req, res) {
   req.on('data', data => { 
     var newMessage = JSON.parse(data);
-    // TODO: chain read and write with next
+    d = new Date();
+    newMessage.createdAt = d.toISOString();
     fs.readFile(path.join(__dirname, '/messages.json'), (err, data) => {
       var messages = JSON.parse(data);
       messages.results.unshift(newMessage);
-
       fs.writeFile(path.join(__dirname, '/messages.json'), JSON.stringify(messages), () => {
         res.status(201).end();
       });
