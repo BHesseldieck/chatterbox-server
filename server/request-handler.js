@@ -12,8 +12,7 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
 
-var messages = require('./messages');
-// var dispatcher = require('httpdispatcher');
+const fs = require('fs');
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
 // This code allows this server to talk to websites that
@@ -56,29 +55,47 @@ var requestHandler = function(request, response) {
   var answer = '';
 
   if (request.method === 'GET' && path === '/classes/messages') {
-    // The outgoing status.
     statusCode = 200;
-    // Make sure to always call response.end() - Node may not send
-    // anything back to the client until you do. The string you pass to
-    // response.end() will be the body of the response - i.e. what shows
-    // up in the browser.
-    //
-    // Calling .end "flushes" the response's internal buffer, forcing
-    // node to actually send all the data over to the client.
-    answer = JSON.stringify(messages);
+
+    fs.readFile('./messages.json', (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        answer = JSON.stringify(JSON.parse(data));
+        response.writeHead(statusCode, headers); 
+        response.end(answer);
+      }
+    });
   } else if (request.method === 'POST' && path === '/classes/messages') {
     statusCode = 201;
+
     request.on('data', function(data) {
-      messages.results.unshift(JSON.parse(data)); // unshift adds new messages to front
+      var message = JSON.parse(data);
+      fs.readFile('./messages.json', (err, data) => {
+        if (err) {
+          console.log(err);
+        } else {
+          var temp = JSON.parse(data);
+          temp.results.unshift(message);
+          fs.writeFile('./messages.json', JSON.stringify(temp), err => {
+            if (err) { 
+              console.log(err); 
+            } else {
+              response.writeHead(statusCode, headers); 
+              response.end(answer);
+            }
+          });
+        }
+      });
     });
   } else if (request.method === 'OPTIONS') {
     statusCode = 200;
+    response.writeHead(statusCode, headers); 
+    response.end(answer);   
+  } else {
+    response.writeHead(statusCode, headers); 
+    response.end(answer);
   }
-
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-  response.writeHead(statusCode, headers); 
-  response.end(answer);
 };
 
 exports.requestHandler = requestHandler;
