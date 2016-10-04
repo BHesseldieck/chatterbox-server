@@ -63,6 +63,12 @@ var requestHandler = function(request, response) {
         response.end(answer);
       }
     });
+  } else if (request.method === 'GET' && path.length <= 1) {
+    fs.readFile('../client/client/index.html', (err, data) => {
+      response.writeHead(200, {'Content-Type': 'text/html', 'Content-Length': data.length});
+      response.write(data);
+      response.end();
+    });
   } else if (request.method === 'POST' && path === '/classes/messages') {
     request.on('data', function(data) {
       var message = JSON.parse(data);
