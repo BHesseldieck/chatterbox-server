@@ -20,12 +20,9 @@ app.use(function(req, res, next) {
 
 app.use(express.static(path.join(__dirname, '../client/client')));
 
-app.get('/', function(req, res) {
-  res.status(200).sendFile(path.join(__dirname, '../client/client/index.html'));
-});
-
 app.get('/classes/messages', function(req, res) {
-  res.status(200).sendFile(path.join(__dirname, '/messages.json'));
+  console.log('order', req.query.order);  // TODO
+  res.sendFile(path.join(__dirname, '/messages.json'));
 });
 
 app.post('/classes/messages', function(req, res) {
@@ -37,7 +34,7 @@ app.post('/classes/messages', function(req, res) {
       var messages = JSON.parse(data);
       messages.results.unshift(newMessage);
       fs.writeFile(path.join(__dirname, '/messages.json'), JSON.stringify(messages), () => {
-        res.status(201).end();
+        res.end();
       });
     });
   });
