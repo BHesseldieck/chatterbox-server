@@ -55,32 +55,24 @@ var requestHandler = function(request, response) {
   var answer = '';
 
   if (request.method === 'GET' && path === '/classes/messages') {
-    statusCode = 200;
-
     fs.readFile('./messages.json', (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
+      if (err) { throw err; } else {
         answer = JSON.stringify(JSON.parse(data));
+        statusCode = 200;
         response.writeHead(statusCode, headers); 
         response.end(answer);
       }
     });
   } else if (request.method === 'POST' && path === '/classes/messages') {
-    statusCode = 201;
-
     request.on('data', function(data) {
       var message = JSON.parse(data);
       fs.readFile('./messages.json', (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          var temp = JSON.parse(data);
-          temp.results.unshift(message);
-          fs.writeFile('./messages.json', JSON.stringify(temp), err => {
-            if (err) { 
-              console.log(err); 
-            } else {
+        if (err) { throw err; } else {
+          var messages = JSON.parse(data);
+          messages.results.unshift(message);
+          fs.writeFile('./messages.json', JSON.stringify(messages), err => {
+            if (err) { throw err; } else {
+              statusCode = 201;
               response.writeHead(statusCode, headers); 
               response.end(answer);
             }
